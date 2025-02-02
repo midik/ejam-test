@@ -16,4 +16,8 @@ export class InMemoryDbService<T extends { id?: number }> {
   findAll(): T[] {
     return Array.from(this.dataStore.values());
   }
+
+  truncate() {
+    this.dataStore.clear();
+  }
 }

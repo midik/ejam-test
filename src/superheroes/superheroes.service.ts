@@ -1,13 +1,26 @@
-import { Injectable } from '@nestjs/common';
+import { Get, Injectable, Post } from '@nestjs/common';
 import { CreateSuperheroDto } from './dto/create-superhero.dto';
+import { Superhero } from './entities/superhero.entity';
+import { SuperheroDbService } from './superhero-db.service';
 
 @Injectable()
 export class SuperheroesService {
+  constructor(private readonly dbService: SuperheroDbService) {}
+
+  @Post()
   create(createSuperheroDto: CreateSuperheroDto) {
-    return 'This action adds a new superhero';
+    // keep dto to entity mapping out of in-memory-db service
+    const entity: Superhero = {
+      name: createSuperheroDto.name,
+      superPower: createSuperheroDto.superPower,
+      humilityScore: createSuperheroDto.humilityScore,
+    } as Superhero;
+
+    return this.dbService.create(entity);
   }
 
+  @Get()
   findAll() {
-    return `This action returns all superheroes`;
+    return this.dbService.findAll();
   }
 }

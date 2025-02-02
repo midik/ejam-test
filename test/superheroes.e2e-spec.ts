@@ -1,5 +1,5 @@
 import * as request from 'supertest';
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { SuperheroesModule } from '../src/superheroes/superheroes.module';
 
@@ -12,6 +12,7 @@ describe('e2e / superheroes ', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
+    app.useGlobalPipes(new ValidationPipe());
     await app.init();
   });
 
@@ -19,21 +20,40 @@ describe('e2e / superheroes ', () => {
     await app.close();
   });
 
-  it('POST /superheroes', async () => {
-    const superheroDto = {
-      name: 'Batman',
-      superPower: 'Rich & Smart',
-      humilityScore: 70,
-    };
+  describe('POST /superheroes', () => {
+    describe('positive', () => {
+      it('should return proper object', async () => {
+        const superheroDto = {
+          name: 'Batman',
+          superPower: 'Rich & Smart',
+          humilityScore: 7,
+        };
 
-    const response = await request(app.getHttpServer())
-      .post('/superheroes')
-      .send(superheroDto)
-      .expect(201);
+        const response = await request(app.getHttpServer())
+          .post('/superheroes')
+          .send(superheroDto)
+          .expect(201);
 
-    expect(response.body).toEqual({
-      id: expect.any(Number) as number,
-      ...superheroDto,
+        expect(response.body).toEqual({
+          id: expect.any(Number) as number,
+          ...superheroDto,
+        });
+      });
+    });
+
+    describe('negative', () => {
+      it('should return 400 on invalid input', async () => {
+        const superheroDto = {
+          name: 'Batman',
+          superPower: 'Rich & Smart',
+          humilityScore: 'qwe',
+        };
+
+        await request(app.getHttpServer())
+          .post('/superheroes')
+          .send(superheroDto)
+          .expect(400);
+      });
     });
   });
 

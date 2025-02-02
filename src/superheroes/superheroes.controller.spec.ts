@@ -1,8 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { SuperheroesController } from './superheroes.controller';
 import { SuperheroesService } from './superheroes.service';
-import { InMemoryDbService } from '../in-memory-db/in-memory-db.service';
 import { SuperheroDbService } from './superhero-db.service';
+import { SuperheroesController } from './superheroes.controller';
 
 describe('SuperheroesController', () => {
   let controller: SuperheroesController;

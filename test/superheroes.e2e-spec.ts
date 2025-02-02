@@ -4,9 +4,13 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { SuperheroesModule } from '../src/superheroes/superheroes.module';
 import { SuperheroDbService } from '../src/superheroes/superhero-db.service';
 
+// e2e tests for superheroes module, broken down by routes,
+//   positive and negative scenarios, and so on :)
+
 describe('e2e / superheroes ', () => {
   let app: INestApplication;
 
+  // simple mock data
   const mockData = [
     {
       name: 'Batman',
@@ -22,11 +26,17 @@ describe('e2e / superheroes ', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
+
+    // attach global validation pipe
     app.useGlobalPipes(new ValidationPipe());
     await app.init();
   });
 
-  // either runInBand or cleanup / apply fixtures here
+  // since we runInBand this, we set our expectations to intermediate states,
+  //   so we don't have to rollback / cleanup DB before each test.
+  // However, that makes using of .only or .skip for certain tests not always possible.
+
+  // here we could maintain the state of the DB between tests
   // beforeEach(() => {
   //   app.get(SuperheroDbService).truncate();
   // });

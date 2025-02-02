@@ -13,6 +13,8 @@ describe('AppController (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
+
+    // attach global validation pipe
     app.useGlobalPipes(new ValidationPipe());
     await app.init();
   });

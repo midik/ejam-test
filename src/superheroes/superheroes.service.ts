@@ -9,7 +9,8 @@ export class SuperheroesService {
 
   @Post()
   create(createSuperheroDto: CreateSuperheroDto) {
-    // keep dto to entity mapping out of in-memory-db service
+    // keep dto-to-entity mapping out of in-memory-db-service
+    //  to reduce its coupling to the Superhero-related things
     const entity: Superhero = {
       name: createSuperheroDto.name,
       superPower: createSuperheroDto.superPower,

@@ -8,5 +8,6 @@ import { InMemoryDbService } from './in-memory-db/in-memory-db.service';
   imports: [SuperheroesModule],
   controllers: [AppController],
   providers: [AppService, InMemoryDbService],
+  exports: [InMemoryDbService],
 })
 export class AppModule {}
